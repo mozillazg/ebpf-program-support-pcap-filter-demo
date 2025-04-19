@@ -9,7 +9,7 @@ import (
 	"github.com/cilium/ebpf/rlimit"
 	"github.com/florianl/go-tc"
 	"github.com/florianl/go-tc/core"
-	"github.com/jschwinger233/elibpcap"
+	// "github.com/jschwinger233/elibpcap"
 	"golang.org/x/sys/unix"
 	"log"
 	"net"
@@ -92,13 +92,13 @@ func injectFilter(spec *ebpf.CollectionSpec, expr string) error {
 	log.Printf("inject pcap filter %s", expr)
 	oldInsts := spec.Programs["tc_prog"].Instructions
 	// 手动实现
-	//newInsts, err := injectPacpFilter(oldInsts, "pcap_filter", expr)
+	newInsts, err := injectPacpFilter(oldInsts, "pcap_filter", expr)
 	// 使用 elibpcap 实现
-	newInsts, err := elibpcap.Inject(expr, oldInsts, elibpcap.Options{
-		AtBpf2Bpf:  "pcap_filter",
-		DirectRead: true,
-		L2Skb:      true,
-	})
+	//newInsts, err := elibpcap.Inject(expr, oldInsts, elibpcap.Options{
+	//	AtBpf2Bpf:  "pcap_filter",
+	//	DirectRead: true,
+	//	L2Skb:      true,
+	//})
 	if err != nil {
 		return err
 	}
